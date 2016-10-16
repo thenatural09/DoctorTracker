@@ -16,8 +16,8 @@ public class Main {
 
     public static void createTables (Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        stmt.execute("CREATE TABLE IF NOT EXISTS doctors (id IDENTITY,name VARCHAR,specialty" +
-                "VARCHAR,address VARCHAR,cost INT,user_id INT)");
+        stmt.execute("CREATE TABLE IF NOT EXISTS doctors (id IDENTITY,name " +
+                "VARCHAR,specialty VARCHAR,address VARCHAR,cost INT,user_id INT)");
         stmt.execute("CREATE TABLE IF NOT EXISTS users (id IDENTITY,name VARCHAR,password VARCHAR)");
     }
 
@@ -33,8 +33,8 @@ public class Main {
     }
 
     public static ArrayList<Doctor> selectDoctor (Connection conn) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM doctors INNER JOIN users" +
-                "ON doctors.user_id = users.id");
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM doctors " +
+                "INNER JOIN users ON doctors.user_id = users.id");
         ResultSet results = stmt.executeQuery();
         ArrayList<Doctor> doctors = new ArrayList<>();
         while(results.next()) {
