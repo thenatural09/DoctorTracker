@@ -14,6 +14,10 @@ Please fill out the forms below to either create a new account or login.<br>
 Hello {{name}}.<br> Welcome to the Doctor Tracker Web App.
 If you would like to add a doctor please fill out the fields below and submit.<br>
 
+<form action="/logout" method="post">
+    <button type="submit">Logout</button>
+</form>
+
 <form action="/create-doctor" method="post">
     <input type="text" placeholder="Doctor Name" name="docName"/>
     <input type="text" placeholder="Doctor Specialty" name="docSpec"/>
