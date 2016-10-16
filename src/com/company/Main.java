@@ -82,6 +82,63 @@ public class Main {
                     return null;
                 }
         );
+
+        Spark.get(
+                "/edit-doctor",
+                (request, response) -> {
+                    int id = Integer.valueOf(request.queryParams("id"));
+                    Doctor doctor = selectDoctor(conn).get(id);
+                    if (doctor == null) {
+                        return null;
+                    }
+                    return new ModelAndView(doctor,"edit.html");
+                },
+                new MustacheTemplateEngine()
+        );
+
+        Spark.post(
+                "/edit-doctor",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn,name);
+                    if (user == null) {
+                        return null;
+                    }
+                    int id = Integer.valueOf(request.queryParams("id"));
+                    Doctor doctor = selectDoctor(conn).get(id);
+                    if(doctor == null) {
+                        return null;
+                    }
+                    String docName = request.queryParams("docName");
+                    String docSpec = request.queryParams("docSpec");
+                    String docAddr = request.queryParams("docAddr");
+                    int docCost = Integer.valueOf(request.queryParams("docCost"));
+                    Doctor doctor1 = editDoctor(conn,docName,docSpec,docAddr,docCost,user.id);
+                    selectDoctor(conn).add(doctor1);
+                    return null;
+                }
+        );
+
+        Spark.post(
+                "/delete-doctor",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn,name);
+                    if (user == null) {
+                        return null;
+                    }
+                    int id = Integer.valueOf(request.queryParams("id"));
+                    Doctor doctor = selectDoctor(conn).get(id);
+                    if (doctor == null) {
+                        return null;
+                    }
+                    deleteDoctor(conn,id);
+                    response.redirect("/");
+                    return null;
+                }
+        );
     }
 
     public static void createTables (Connection conn) throws SQLException {
