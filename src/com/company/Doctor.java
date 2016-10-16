@@ -19,4 +19,11 @@ public class Doctor {
         this.cost = cost;
         this.author = author;
     }
+
+    public Doctor(String name, String specialty, String address, int cost) {
+        this.name = name;
+        this.specialty = specialty;
+        this.address = address;
+        this.cost = cost;
+    }
 }

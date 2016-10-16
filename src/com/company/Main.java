@@ -120,6 +120,26 @@ public class Main {
         return doctors;
     }
 
+    public static Doctor editDoctor (Connection conn,String name,
+                                     String specialty,String address,int cost,int userId) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("UPDATE doctors SET name = ?," +
+                "specialty = ?,address = ?,cost = ?,user_id = ?");
+        stmt.setString(1,name);
+        stmt.setString(2,specialty);
+        stmt.setString(3,address);
+        stmt.setInt(4,cost);
+        stmt.setInt(5,userId);
+        stmt.execute();
+        return new Doctor(name,specialty,address,cost);
+    }
+
+    public static void deleteDoctor (Connection conn,int id) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("DELETE FROM doctors WHERE id = ?");
+        stmt.setInt(1,id);
+        stmt.execute();
+    }
+
+
     public static void insertUser(Connection conn,String name,String password) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("INSERT INTO users VALUES(null,?,?)");
         stmt.setString(1,name);
