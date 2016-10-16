@@ -1,10 +1,15 @@
 package com.company;
 
 import org.h2.tools.Server;
+import spark.ModelAndView;
+import spark.Session;
+import spark.Spark;
+import spark.template.mustache.MustacheTemplateEngine;
 
 import javax.print.Doc;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
@@ -12,6 +17,71 @@ public class Main {
         Server.createWebServer().start();
         Connection conn = DriverManager.getConnection("jdbc:h2:./main");
         createTables(conn);
+
+        Spark.get(
+                "/",
+                (request,response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn,name);
+                    HashMap m = new HashMap<>();
+                    if (user != null) {
+                        m.put("name",user.name);
+                    }
+                    m.put("doctors",selectDoctor(conn));
+                    return new ModelAndView(m,"home.html");
+                },
+                new MustacheTemplateEngine()
+        );
+
+        Spark.post(
+                "/login",
+                (request,response) -> {
+                    String name = request.queryParams("loginName");
+                    String password = request.queryParams("password");
+                    User user = selectUser(conn,name);
+                    if (user == null) {
+                        insertUser(conn,name,password);
+                    }
+                    else if (!password.equals(user.password)) {
+                        return null;
+                    }
+                    Session session = request.session();
+                    session.attribute("loginName",name);
+                    response.redirect("/");
+                    return null;
+                }
+        );
+
+        Spark.post(
+                "/logout",
+                (request,response) -> {
+                    Session session = request.session();
+                    session.invalidate();
+                    response.redirect("/");
+                    return null;
+                }
+        );
+
+        Spark.post(
+                "/create-doctor",
+                (request, response) -> {
+                    Session session = request.session();
+                    String name = session.attribute("loginName");
+                    User user = selectUser(conn,name);
+                    if (user == null) {
+                        response.redirect("/");
+                        return null;
+                    }
+                    String docName = request.queryParams("docName");
+                    String docSpec = request.queryParams("docSpec");
+                    String docAddr = request.queryParams("docAddr");
+                    int docCost = Integer.valueOf(request.queryParams("docCost"));
+                    insertDoctor(conn,docName,docSpec,docAddr,docCost,user.id);
+                    response.redirect("/");
+                    return null;
+                }
+        );
     }
 
     public static void createTables (Connection conn) throws SQLException {

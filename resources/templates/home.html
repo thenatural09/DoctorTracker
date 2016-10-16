@@ -1,7 +1,27 @@
 <html>
 <body>
 
+{{^name}}
+Please fill out the forms below to either create a new account or login.<br>
+<form action="/login" method="post">
+    <input type="text" placeholder="Enter name" name="loginName"/>
+    <input type="password" placeholder="Password" name="password"/>
+    <button type="submit">Login</button>
+</form>
+{{/name}}
 
+{{#name}}
+Hello {{name}}.<br> Welcome to the Doctor Tracker Web App.
+If you would like to add a doctor please fill out the fields below and submit.<br>
+
+<form action="/create-doctor" method="post">
+    <input type="text" placeholder="Doctor Name" name="docName"/>
+    <input type="text" placeholder="Doctor Specialty" name="docSpec"/>
+    <input type="text" placeholder="Doctor Address" name="docAddr"/>
+    <input type="text" placeholder="Average Cost" name="docCost"/>
+    <button type="submit">Submit Doctor</button>
+</form>
+{{/name}}
 
 </body>
 </html>
