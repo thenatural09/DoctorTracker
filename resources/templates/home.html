@@ -21,11 +21,30 @@ If you would like to add a doctor please fill out the fields below and submit.<b
 <form action="/create-doctor" method="post">
     <input type="text" placeholder="Doctor Name" name="docName"/>
     <input type="text" placeholder="Doctor Specialty" name="docSpec"/>
-    <input type="text" placeholder="Doctor Address" name="docAddr"/>
+    <input type="text" placeholder="Doctor Location" name="docAddr"/>
     <input type="text" placeholder="Average Cost" name="docCost"/>
     <button type="submit">Submit Doctor</button>
 </form>
 {{/name}}
+
+<table>
+    <tr>
+        <th>Doctor's Name</th>
+        <th>Specialty</th>
+        <th>Location/Address</th>
+        <th>Average Cost</th>
+        <th>Poster's Name</th>
+    </tr>
+    {{#doctors}}
+    <tr>
+        <th>{{name}}</th>
+        <th>{{specialty}}</th>
+        <th>{{address}}</th>
+        <th>{{cost}}</th>
+        <th>{{author}}</th>
+    </tr>
+    {{/doctors}}
+</table>
 
 </body>
 </html>
