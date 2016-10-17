@@ -99,6 +99,7 @@ public class Main {
                     String name = session.attribute("loginName");
                     User user = selectUser(conn,name);
                     if (user == null) {
+                        response.redirect("/");
                         return null;
                     }
                     String docName = request.queryParams("docName");
@@ -118,6 +119,7 @@ public class Main {
                     String name = session.attribute("loginName");
                     User user = selectUser(conn,name);
                     if (user == null) {
+                        response.redirect("/");
                         return null;
                     }
                     int id = Integer.valueOf(request.queryParams("id"));

@@ -34,8 +34,10 @@ If you would like to add a doctor please fill out the fields below and submit.<b
         <th>Location/Address</th>
         <th>Average Cost</th>
         <th>Poster's Name</th>
+        {{#name}}
         <th></th>
         <th></th>
+        {{/name}}
     </tr>
     {{#doctors}}
     <tr>
@@ -45,13 +47,17 @@ If you would like to add a doctor please fill out the fields below and submit.<b
         <td>{{cost}}</td>
         <td>{{author}}</td>
         <td>
+            {{#name}}
             <form action="/delete-doctor" method="post">
                 <input type="hidden" value="{{id}}" name="id"/>
                 <button type="submit">Delete</button>
             </form>
+            {{/name}}
         </td>
         <td>
+            {{#name}}
             <a href="/edit-doctor?id={{id}}">Edit</a>
+            {{/name}}
         </td>
     </tr>
     {{/doctors}}
