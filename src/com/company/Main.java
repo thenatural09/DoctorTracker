@@ -87,11 +87,7 @@ public class Main {
                 "/edit-doctor",
                 (request, response) -> {
                     int id = Integer.valueOf(request.queryParams("id"));
-                    Doctor doctor = selectDoctor(conn).get(id);
-                    if (doctor == null) {
-                        return null;
-                    }
-                    return new ModelAndView(doctor,"edit.html");
+                    return new ModelAndView(id,"edit.html");
                 },
                 new MustacheTemplateEngine()
         );
@@ -105,17 +101,12 @@ public class Main {
                     if (user == null) {
                         return null;
                     }
-                    int id = Integer.valueOf(request.queryParams("id"));
-                    Doctor doctor = selectDoctor(conn).get(id);
-                    if(doctor == null) {
-                        return null;
-                    }
                     String docName = request.queryParams("docName");
                     String docSpec = request.queryParams("docSpec");
                     String docAddr = request.queryParams("docAddr");
                     int docCost = Integer.valueOf(request.queryParams("docCost"));
-                    Doctor doctor1 = editDoctor(conn,id,docName,docSpec,docAddr,docCost,user.id);
-                    selectDoctor(conn).add(doctor1);
+                    editDoctor(conn,docName,docSpec,docAddr,docCost,user.id);
+                    response.redirect("/");
                     return null;
                 }
         );
@@ -130,10 +121,6 @@ public class Main {
                         return null;
                     }
                     int id = Integer.valueOf(request.queryParams("id"));
-                    Doctor doctor = selectDoctor(conn).get(id);
-                    if (doctor == null) {
-                        return null;
-                    }
                     deleteDoctor(conn,id);
                     response.redirect("/");
                     return null;
@@ -177,7 +164,7 @@ public class Main {
         return doctors;
     }
 
-    public static Doctor editDoctor (Connection conn,int id,String name,
+    public static Doctor editDoctor (Connection conn,String name,
                                      String specialty,String address,int cost,int userId) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("UPDATE doctors SET id = null, name = ?," +
                 "specialty = ?,address = ?,cost = ?,user_id = ?");
