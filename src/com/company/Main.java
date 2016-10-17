@@ -114,7 +114,7 @@ public class Main {
                     String docSpec = request.queryParams("docSpec");
                     String docAddr = request.queryParams("docAddr");
                     int docCost = Integer.valueOf(request.queryParams("docCost"));
-                    Doctor doctor1 = editDoctor(conn,docName,docSpec,docAddr,docCost,user.id);
+                    Doctor doctor1 = editDoctor(conn,id,docName,docSpec,docAddr,docCost,user.id);
                     selectDoctor(conn).add(doctor1);
                     return null;
                 }
@@ -177,9 +177,9 @@ public class Main {
         return doctors;
     }
 
-    public static Doctor editDoctor (Connection conn,String name,
+    public static Doctor editDoctor (Connection conn,int id,String name,
                                      String specialty,String address,int cost,int userId) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("UPDATE doctors SET name = ?," +
+        PreparedStatement stmt = conn.prepareStatement("UPDATE doctors SET id = null, name = ?," +
                 "specialty = ?,address = ?,cost = ?,user_id = ?");
         stmt.setString(1,name);
         stmt.setString(2,specialty);

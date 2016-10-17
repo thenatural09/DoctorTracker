@@ -2,6 +2,7 @@ package com.company;
 
 import org.junit.Test;
 
+import javax.print.Doc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -34,7 +35,10 @@ public class MainTest {
         Main.insertUser(conn,"Troy","pass");
         Main.insertDoctor(conn,"Dr. Brown","brain surgery","723 Corporal St Dallas,TX",500,1);
         ArrayList<Doctor> doctors = Main.selectDoctor(conn);
+        int id = 1;
+        Doctor doctor = Main.editDoctor(conn,id,"Troy","help","me",1,1);
+        Main.deleteDoctor(conn,id);
         conn.close();
-        assertTrue(!doctors.isEmpty());
+        assertTrue(doctor.name.equals("Troy"));
     }
 }
